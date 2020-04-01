@@ -1,0 +1,21 @@
+Package: infercnvPlus
+Title: Enhanced 'infercnv' package
+Version: 0.1.0
+Authors@R: 
+    person(given = "Cuijuan",
+           family = "Zhang",
+           role = c("aut", "cre"),
+           email = "zhangcj95@163.com",
+           comment = c(ORCID = "YOUR-ORCID-ID"))
+Description: Inferring copy number variant from single-cell RNA-seq, and extract cells with specific CNVs.
+License: BSD_3_clause + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.0.2
+NeedsCompilation: no
+Packaged: 2020-03-27 09:32:02 UTC; charlene
+Author: Cuijuan Zhang [aut, cre]
+Maintainer: Cuijuan Zhang <zhangcj95@163.com>
+Depends: R (>= 3.4.1)
+Imports: stats, grid, magrittr, dendextend, RColorBrewer,
+        ComplexHeatmap (>= 2.0.0)
