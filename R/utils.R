@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 
 
-#' @import stats
+#' @importFrom stats filter
 #' @importFrom magrittr "%>%"
 #' @importFrom dendextend set
 #' @importFrom dendextend color_branches
@@ -11,7 +11,7 @@
 #' @importFrom ComplexHeatmap Heatmap
 #' @importFrom ComplexHeatmap HeatmapAnnotation
 #' @importFrom ComplexHeatmap rowAnnotation
-#' @importFrom ComplexHeatmap decorate_heatmap_body
+#' @importFrom ComplexHeatmap decorate_annotation
 #' 
 #' @title Infer CNV changes given a matrix of RNASeq counts. Output a pdf and matrix of final values.
 #'
