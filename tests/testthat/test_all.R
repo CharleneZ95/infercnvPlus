@@ -19,7 +19,7 @@ test_that("denoiseVis", {
 })
 
 test_that("visualCNV", {
-    res3 <- visualCNV(data = infercnv_obj)
+    res3 <- visualCNV(data = infercnv_obj, cutree_k = 2)
     
     expect_that(res3$cluster$hclust, equals(infercnv_obj$cluster$hclust))
 })

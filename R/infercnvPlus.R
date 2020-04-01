@@ -450,7 +450,7 @@ plotCNV<- function(data,
     chr_order <- data$chr_order
     chr <- ifelse(chr_order %in% c(seq(1, 22, 2), "X"), "odd", "even")
     col_anno <- HeatmapAnnotation(chr = chr, col = list(chr = c(odd = "gray60", even = "gray80")), 
-        show_legend = FALSE, show_annotation_name = FALSE)
+        show_legend = FALSE, show_annotation_name = TRUE)
     ## row annotation: origin
     ref_obs <- as.character(data$reference_obs)
     origin <- rep(obs_lab, nrow(plot_data))
@@ -495,10 +495,10 @@ plotCNV<- function(data,
         perc <- length(which(chr_order == c))/length(chr_order)
         lab <- ifelse(perc >= 0.02, c, ".")
         x_axis <- median(which(chr_order == c))/length(chr_order)
-        #bs <- 0.9/120 * nrow(plot_data)
-        #y_axis <- ifelse(is.null(cutree_k), bs, bs + (cutree_k - 1)/nrow(plot_data))
+        bs <- 0.0067 * nrow(plot_data)
+        y_axis <- ifelse(is.null(cutree_k), bs, bs + (cutree_k - 1)/nrow(plot_data))
         decorate_heatmap_body("cnv", { grid.text(label = lab, x = unit(x_axis, 'npc'),
-                                                y = unit(91.3/154*nrow(plot_data), "mm"), rot=0,
+                                                y = unit(y_axis, "npc"), rot=0,
                                                 gp = gpar(fontsize = 11, family = 'Arial')) })
     }
     dev.off()
