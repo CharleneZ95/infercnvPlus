@@ -461,7 +461,7 @@ plotCNV<- function(data,
     origin[which(rownames(plot_data) %in% ref_obs)] <- ref_lab
     row_anno <- rowAnnotation(origin=origin, col = list(origin = c('obs'='#FFFF00', 
         'ref'='#696969')), annotation_legend_param = list(title_gp=gpar(fontsize=12, fontface='bold'), 
-        labels_gp=gpar(fontsize=12), legend_height = unit(4, "cm"), grid_width=unit(0.5, "cm")), 
+        labels_gp=gpar(fontsize=11), legend_height = unit(4, "cm"), grid_width=unit(0.5, "cm")), 
         show_legend=TRUE, show_annotation_name=FALSE)
    
     # set legend parameters
@@ -472,7 +472,7 @@ plotCNV<- function(data,
                      at=limits,
                      labels=limits,
                      title_gp=gpar(fontsize=12, fontface='bold'),
-                     labels_gp=gpar(fontsize=12),
+                     labels_gp=gpar(fontsize=11),
                      legend_height = unit(3, "cm"),
                      grid_width=unit(0.5, "cm"),
                      border='black')
