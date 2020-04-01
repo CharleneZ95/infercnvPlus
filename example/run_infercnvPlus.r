@@ -10,13 +10,18 @@ cnv_obj <- inferCNV(data = npc_expr,
                     reference_obs = ref_obs,
                     window_size = 101,
                     out_path = "output_dir", # dir is auto-created for storing outputs
-                    noise_filter = 0,
+                    noise_filter = NULL,
                     vis_bounds = "-1,1")
 
 # Cluster cells and visualize
 cnv_obj <- visualCNV(data = cnv_obj,
                      cutree_k = 2,
-                     out_file = "plot_cnv.png")
+                     out_file = "plot_cnv.png",
+                     border = TRUE)
 
 # Extract cells from the specific subtrees
-cnv_obj <- extractCells(data = cnv_obj, subtrees = 2)
+cnv_obj <- extractCells(data = cnv_obj,
+                        subtrees = 2,
+                        lab_to_rm = "ref")
+cells <- cnv_obj$target
+

@@ -54,7 +54,7 @@ inferCNV <- function(data=NULL,
                       out_path='output_dir',
                       contig_tail=NULL,
                       noise_filter=NULL,
-                      vis_bounds=NULL) {
+                      vis_bounds="-1,1") {
     
     logging::loginfo("inferCNV: Start.")
     
@@ -104,6 +104,10 @@ inferCNV <- function(data=NULL,
         contig_tail = (window_size - 1)/2
     }
     
+    # check noise filter
+    if (is.null(noise_filter) || noise_filter == 0) {
+        noise_filter <- NULL
+    }
     
     # Run infercnv
     ret_list <- calcCNV(data = data, 
@@ -138,7 +142,8 @@ inferCNV <- function(data=NULL,
 #' @param border whether draw border. The value can be logical or a string of color.
 #' @param out_file filename to save plot.
 #' @param out_path output directory.
-#'
+#' @param plot_dend whether to plot dendrogram or not. The value should be logical.
+#' 
 #' @return An 'infercnv' object
 #' 
 #' @export
@@ -148,13 +153,14 @@ visualCNV <- function(data,
                      ref_lab = "ref",
                      obs_lab = "obs",
                      distance_method = 'euclidean',
-                     clustering_method="ward.D2",
+                     clustering_method = "ward.D2",
                      cutree_k = NULL,
                      colors = colorRampPalette(rev(brewer.pal(n = 11,
                                                 name = "RdBu")))(11),
-                     border=TRUE,
-                     out_file='plot_cnv.png',
-                     out_path='output_dir') {
+                     border = TRUE,
+                     plot_dend = FALSE,
+                     out_file = 'plot_cnv.png',
+                     out_path = 'output_dir') {
     
     # Check arguments --------------------
     logging::loginfo("visualCNV: Start.")
@@ -166,7 +172,9 @@ visualCNV <- function(data,
     
     # check assay
     if (is.null(assay)) {
-        assay <- paste0("cnv_score_vis_filter", data$parameter$noise_filter)
+        noise_filter <- data$parameter$noise_filter
+        assay <- ifelse(is.null(noise_filter), 'cnv_score_vis',
+            paste0("cnv_score_vis_filter", noise_filter))
         logging::logwarn(paste0("assay: Since assay was not assigned, \"", assay, 
             "\" will be used."))
     }
@@ -197,7 +205,8 @@ visualCNV <- function(data,
                         clustering_method = clustering_method, 
                         cutree_k = cutree_k, 
                         colors = colors, 
-                        border = border, 
+                        border = border,
+                        plot_dend = plot_dend, 
                         out_file = out_file, 
                         out_path = out_path)
     
@@ -228,10 +237,6 @@ denoiseVis <- function(data = NULL,
         stop("data: Data should be an \"infercnv\" object.")
     }
     
-    if (is.null(noise_threshold) || !is.numeric(noise_threshold)) {
-        stop("noise_threshold: Numeric scala is required.")
-    }
-    
     bounds <- strsplit(vis_bounds, ',')[[1]]
     lower_bound <- as.numeric(bounds[1])
     upper_bound <- as.numeric(bounds[2])
@@ -241,11 +246,11 @@ denoiseVis <- function(data = NULL,
    
     logging::loginfo("Remove noise.")
     ret_list <- data
-    data <- data$cnv_score
+    data <- data$cnv_score_raw
     
     # Noise filter
-    if (is.numeric(noise_threshold)) {
-        data[abs(data) < abs(noise_threshold)] <- 0
+    if (!is.null(noise_threshold)) {
+        data[abs(data) < noise_threshold] <- 0
     }
     
     # Handle outliers
@@ -255,7 +260,8 @@ denoiseVis <- function(data = NULL,
     data[data > upper_bound] <- upper_bound
     
     # return data
-    label <- paste0("cnv_score_vis_filter", noise_threshold)
+    label <- ifelse(is.null(noise_threshold), "cnv_score_vis",
+        paste0("cnv_score_vis_filter", noise_threshold))
     ret_list[[label]] <- data
     ret_list[["parameter"]][["noise_filter"]] <- noise_threshold
     ret_list[["parameter"]][["vis_bounds"]] <- c(lower_bound, upper_bound)
@@ -269,6 +275,7 @@ denoiseVis <- function(data = NULL,
 #' @param data an 'infercnv' object as produced by inferCNV.
 #' @param k an integer scalar or vector with the desired number of groups.
 #' @param out_path output directory.
+#' @param plot_dend whether to plot dendrogram or not. The value should be logical.
 #'
 #' @return Return an 'infercnv' object with dendlist.
 #'
@@ -276,7 +283,8 @@ denoiseVis <- function(data = NULL,
 #'
 pruneCutree <- function(data, 
                          k, 
-                         out_path = "output_dir") {
+                         out_path = "output_dir",
+                         plot_dend = FALSE) {
     # data processing
     dend <- data[["cluster"]][["hclust"]] %>% 
         as.dendrogram() %>% 
@@ -284,11 +292,13 @@ pruneCutree <- function(data,
         color_branches(k = k, groupLabels = TRUE)
 
     # Plot dendrogram with groupLabels for each subtrees
-    png(file.path(out_path, "plot_dendrogram.png"), width = 7, height = 10, unit = "in", 
-        res = 300)
-    plot(dend, main = "Original dendrogram", horiz = TRUE)
-    dev.off()
-    
+    if (plot_dend) {
+        png(file.path(out_path, "plot_dendrogram.png"), width = 7, height = 10, unit = "in", 
+            res = 300)
+        plot(dend, main = "Original dendrogram", horiz = TRUE)
+        dev.off()
+    }
+
     # Prune cutree to dendlist
     clusters <- dendextend::cutree(dend, k, order_clusters_as_data = FALSE)
     split <- data.frame(clusters, paste0("C", as.numeric(clusters)))

@@ -357,7 +357,6 @@ calcCNV <- function(data=NULL,
         " Max=", round(max(data_smoothed), 3), "."))
     
     # Remove Ends
-    logging::logdebug(chr_order)
     remove_indices <- c()
     logging::loginfo(":Remove tails.")
     for (chr in unlist(unique(chr_order))) {
@@ -369,27 +368,28 @@ calcCNV <- function(data=NULL,
         chr_order <- chr_order[remove_indices, ]
         data_smoothed <- data_smoothed[remove_indices, , drop = FALSE]
     }
+
     
     # Save objects
-    ret_list[["cnv_score"]] <- as.matrix(data_smoothed)
+    ret_list[["cnv_score_raw"]] <- as.matrix(data_smoothed)
     ret_list[["chr_order"]] <- paste(as.vector(as.matrix(chr_order)))
     ret_list[["reference_obs"]] <- reference_obs
     ret_list[["parameter"]] <- list(gene_cutoff = cutoff, window_size = window_size, 
         contig_tail = contig_tail)
     class(ret_list) <- "infercnv"
-    
-    finalMat <- ret_list[["cnv_score"]]
+
     # Denoise and outliers removal for visualization
-    if (!is.null(noise_filter)) {
-        ret_list <- denoiseVis(data = ret_list, 
-                               noise_threshold = noise_filter, 
-                               vis_bounds = vis_bounds)
-        assay <- paste0("cnv_score_vis_filter", noise_filter)
-        finalMat <- ret_list[[assay]]
-    }
+    ret_list <- denoiseVis(data = ret_list, 
+                           noise_threshold = noise_filter, 
+                           vis_bounds = vis_bounds)
+
+    assay <- ifelse(is.null(noise_filter), "cnv_score_vis",
+        paste0("cnv_score_vis_filter", noise_filter))
+
+    finalMat <- ret_list[[assay]]
     
     # Log output
-    logging::loginfo(paste0(":Final dimensions (genes,cells) = ", paste(dim(data_smoothed), 
+    logging::loginfo(paste0(":Final dimensions (genes,cells) = ", paste(dim(finalMat), 
         collapse = ","), " Min=", round(min(finalMat), 3), " Max=", round(max(finalMat), 
         3), "."))
     
@@ -425,6 +425,7 @@ plotCNV<- function(data,
                    cutree_k,
                    colors,
                    border,
+                   plot_dend,
                    out_file, 
                    out_path) {
     
@@ -439,25 +440,29 @@ plotCNV<- function(data,
     
     dend <- as.dendrogram(hc)
     if (is.numeric(cutree_k)) {
-        ret_list <- pruneCutree(ret_list, k = cutree_k, out_path = out_path)
+        ret_list <- pruneCutree(ret_list, k = cutree_k, out_path = out_path, plot_dend=plot_dend)
         dend <- ret_list[["cluster"]][["dend"]]
         ret_list[["cluster"]][["dend"]] <- NULL
     }
     
     # plot ----------------------
     logging::loginfo(":Plot cnv")
+
     # set annotation column annotation: chromosome
     chr_order <- data$chr_order
     chr <- ifelse(chr_order %in% c(seq(1, 22, 2), "X"), "odd", "even")
-    col_anno <- HeatmapAnnotation(chr = chr, col = list(chr = c(odd = "gray60", even = "gray80")), 
+    col_anno <- HeatmapAnnotation(chr = chr, 
+        col = list(chr = c(odd = "gray60", even = "gray80")), 
         show_legend = FALSE, show_annotation_name = TRUE)
+
     ## row annotation: origin
     ref_obs <- as.character(data$reference_obs)
     origin <- rep(obs_lab, nrow(plot_data))
     origin[which(rownames(plot_data) %in% ref_obs)] <- ref_lab
-    row_anno <- rowAnnotation(origin=origin, col = list(origin = c('obs'='#FFFF00', 'ref'='#696969')),
-        annotation_legend_param = list(title_gp=gpar(fontsize=12, fontface='bold'), labels_gp=gpar(fontsize=12),
-        legend_height = unit(4, "cm"), grid_width=unit(0.5, "cm")), show_legend=TRUE, show_annotation_name=FALSE)
+    row_anno <- rowAnnotation(origin=origin, col = list(origin = c('obs'='#FFFF00', 
+        'ref'='#696969')), annotation_legend_param = list(title_gp=gpar(fontsize=12, fontface='bold'), 
+        labels_gp=gpar(fontsize=12), legend_height = unit(4, "cm"), grid_width=unit(0.5, "cm")), 
+        show_legend=TRUE, show_annotation_name=FALSE)
    
     # set legend parameters
     vis_bounds <- data[["parameter"]][["vis_bounds"]]
@@ -491,16 +496,18 @@ plotCNV<- function(data,
     draw(ht)
     
     # add chromosome labels
+    chr_lab <- c()
+    x_axis <- c()
     for (c in unique(chr_order)) {
         perc <- length(which(chr_order == c))/length(chr_order)
-        lab <- ifelse(perc >= 0.02, c, ".")
-        x_axis <- median(which(chr_order == c))/length(chr_order)
-        bs <- 0.0067 * nrow(plot_data)
-        y_axis <- ifelse(is.null(cutree_k), bs, bs + (cutree_k - 1)/nrow(plot_data))
-        decorate_heatmap_body("cnv", { grid.text(label = lab, x = unit(x_axis, 'npc'),
-                                                y = unit(y_axis, "npc"), rot=0,
-                                                gp = gpar(fontsize = 11, family = 'Arial')) })
+        chr_lab <- c(chr_lab, ifelse(perc >= 0.02, c, "."))
+        x_axis <- c(x_axis, median(which(chr_order == c))/length(chr_order))
     }
+
+    decorate_annotation("chr", {
+        grid.text(chr_lab, x = unit(x_axis, "npc"), gp=gpar(fontsize=10.5))
+    })
+
     dev.off()
     return(ret_list)
 }

@@ -13,7 +13,7 @@ inferCNV(
   out_path = "output_dir",
   contig_tail = NULL,
   noise_filter = NULL,
-  vis_bounds = NULL
+  vis_bounds = "-1,1"
 )
 }
 \arguments{

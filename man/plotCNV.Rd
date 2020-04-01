@@ -14,6 +14,7 @@ plotCNV(
   cutree_k,
   colors,
   border,
+  plot_dend,
   out_file,
   out_path
 )

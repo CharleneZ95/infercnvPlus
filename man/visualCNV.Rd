@@ -16,6 +16,7 @@ visualCNV(
   cutree_k = NULL,
   colors = colorRampPalette(rev(brewer.pal(n = 11, name = "RdBu")))(11),
   border = TRUE,
+  plot_dend = FALSE,
   out_file = "plot_cnv.png",
   out_path = "output_dir"
 )
@@ -36,6 +37,8 @@ visualCNV(
 \item{colors}{vector of colors used in heatmap.}
 
 \item{border}{whether draw border. The value can be logical or a string of color.}
+
+\item{plot_dend}{whether to plot dendrogram or not. The value should be logical.}
 
 \item{out_file}{filename to save plot.}
 

@@ -6,7 +6,7 @@
 
 Args:}
 \usage{
-pruneCutree(data, k, out_path = "output_dir")
+pruneCutree(data, k, out_path = "output_dir", plot_dend = FALSE)
 }
 \arguments{
 \item{data}{an 'infercnv' object as produced by inferCNV.}
@@ -14,6 +14,8 @@ pruneCutree(data, k, out_path = "output_dir")
 \item{k}{an integer scalar or vector with the desired number of groups.}
 
 \item{out_path}{output directory.}
+
+\item{plot_dend}{whether to plot dendrogram or not. The value should be logical.}
 }
 \value{
 Return an 'infercnv' object with dendlist.
