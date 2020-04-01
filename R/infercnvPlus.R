@@ -290,15 +290,15 @@ order_reduce <- function(data, genomic_position) {
 #'     Chromosome order
 #'     Names of cells in reference groups.
 #' 
-calcCNV <- function(data=NULL,
-                    gene_pos=NULL,
-                    cutoff=NULL,
+calcCNV <- function(data,
+                    gene_pos,
+                    cutoff,
                     reference_obs,
-                    window_size=101,
-                    out_path='output_dir',
-                    contig_tail=NULL,
-                    noise_filter=NULL,
-                    vis_bounds=NULL) {
+                    window_size,
+                    out_path,
+                    contig_tail,
+                    noise_filter,
+                    vis_bounds) {
    
     ret_list <- list()
     
@@ -416,18 +416,18 @@ calcCNV <- function(data=NULL,
 #'
 #' @return An 'infercnv' object 
 #' 
-plotCNV<- function(data,
-                   assay,
-                   ref_lab,
-                   obs_lab,
-                   dist_method,
-                   clustering_method,
-                   cutree_k,
-                   colors,
-                   border,
-                   plot_dend,
-                   out_file, 
-                   out_path) {
+plotCNV <- function(data,
+                    assay,
+                    ref_lab,
+                    obs_lab,
+                    dist_method,
+                    clustering_method,
+                    cutree_k,
+                    colors,
+                    border,
+                    plot_dend,
+                    out_file, 
+                    out_path) {
     
     # data processing -----------------
     logging::loginfo(":Data processing")

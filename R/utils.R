@@ -47,14 +47,14 @@
 #' @export
 #' 
 inferCNV <- function(data=NULL,
-                      gene_pos=NULL,
-                      cutoff=NULL,
-                      reference_obs,
-                      window_size=101,
-                      out_path='output_dir',
-                      contig_tail=NULL,
-                      noise_filter=NULL,
-                      vis_bounds="-1,1") {
+                     gene_pos=NULL,
+                     cutoff=NULL,
+                     reference_obs,
+                     window_size=101,
+                     out_path='output_dir',
+                     contig_tail=NULL,
+                     noise_filter=NULL,
+                     vis_bounds="-1,1") {
     
     logging::loginfo("inferCNV: Start.")
     
@@ -149,18 +149,17 @@ inferCNV <- function(data=NULL,
 #' @export
 #' 
 visualCNV <- function(data,
-                     assay = NULL,
-                     ref_lab = "ref",
-                     obs_lab = "obs",
-                     distance_method = 'euclidean',
-                     clustering_method = "ward.D2",
-                     cutree_k = NULL,
-                     colors = colorRampPalette(rev(brewer.pal(n = 11,
-                                                name = "RdBu")))(11),
-                     border = TRUE,
-                     plot_dend = FALSE,
-                     out_file = 'plot_cnv.png',
-                     out_path = 'output_dir') {
+                      assay = NULL,
+                      ref_lab = "ref",
+                      obs_lab = "obs",
+                      distance_method = 'euclidean',
+                      clustering_method = "ward.D2",
+                      cutree_k = NULL,
+                      colors = colorRampPalette(rev(brewer.pal(n = 11, name = "RdBu")))(11),
+                      border = TRUE,
+                      plot_dend = FALSE,
+                      out_file = 'plot_cnv.png',
+                      out_path = 'output_dir') {
     
     # Check arguments --------------------
     logging::loginfo("visualCNV: Start.")
@@ -230,8 +229,8 @@ visualCNV <- function(data,
 #' @export
 #' 
 denoiseVis <- function(data = NULL, 
-                        noise_threshold = NULL, 
-                        vis_bounds = '-1,1') {
+                       noise_threshold = NULL, 
+                       vis_bounds = '-1,1') {
     
     if (is.null(data) || class(data) != "infercnv") {
         stop("data: Data should be an \"infercnv\" object.")
@@ -282,9 +281,9 @@ denoiseVis <- function(data = NULL,
 #' @export
 #'
 pruneCutree <- function(data, 
-                         k, 
-                         out_path = "output_dir",
-                         plot_dend = FALSE) {
+                        k, 
+                        out_path = "output_dir",
+                        plot_dend = FALSE) {
     # data processing
     dend <- data[["cluster"]][["hclust"]] %>% 
         as.dendrogram() %>% 
@@ -328,8 +327,8 @@ pruneCutree <- function(data,
 #' @export
 #'
 extractCells <- function(data, 
-                          subtrees = NULL, 
-                          lab_to_rm = "ref") {
+                         subtrees = NULL, 
+                         lab_to_rm = "ref") {
     
     # data should be a infercnv object
     if (class(data) != "infercnv") {
