@@ -370,7 +370,8 @@ umi_to_log2tpm <- function(data) {
 #' 
 #' Args:
 #' @param data a Seurat object.
-#' 
+#' @param slot slot to use
+#' @param assay which assays to use.
 #' @return Return a TPM log2-transformed matrix.
 #' 
 #' @export 
