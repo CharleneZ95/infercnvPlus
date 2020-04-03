@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 
-
+#' @import logging
 #' @importFrom stats filter
 #' @importFrom magrittr "%>%"
 #' @importFrom dendextend set
