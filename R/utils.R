@@ -354,7 +354,7 @@ extractCells <- function(data,
 #' Args:
 #' @param data UMI counts matrix (genes X cells).
 #' 
-#' @return Return TPM log2-transformed matrix. 
+#' @return Return log2-transformed TPM matrix. 
 #' 
 #' @export 
 #' 
