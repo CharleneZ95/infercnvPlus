@@ -5,15 +5,15 @@
 \title{Calculate CNV scores given a matrix of RNASeq counts. Output a matrix of final values.}
 \usage{
 calcCNV(
-  data = NULL,
-  gene_pos = NULL,
-  cutoff = NULL,
+  data,
+  gene_pos,
+  cutoff,
   reference_obs,
-  window_size = 101,
-  out_path = "output_dir",
-  contig_tail = NULL,
-  noise_filter = NULL,
-  vis_bounds = NULL
+  window_size,
+  out_path,
+  contig_tail,
+  noise_filter,
+  vis_bounds
 )
 }
 \arguments{
