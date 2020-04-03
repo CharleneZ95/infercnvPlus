@@ -285,10 +285,10 @@ order_reduce <- function(data, genomic_position) {
 #'
 #' @return
 #' Returns an 'infercnv' object including:
-#'     CNV matrix before visualization.
-#'     CNV matrix after denoise and outlier removal for visualization.
-#'     Chromosome order
-#'     Names of cells in reference groups.
+#'     1. CNV matrix before visualization.
+#'     2. CNV matrix after denoise and outlier removal for visualization.
+#'     3. Chromosome order.
+#'     4. Names of cells in reference groups.
 #' 
 calcCNV <- function(data,
                     gene_pos,
@@ -414,7 +414,10 @@ calcCNV <- function(data,
 #' @param out_file: filename to save plot
 #' @param out_path: output directory
 #'
-#' @return An 'infercnv' object 
+#' @return 
+#' Returns an 'infercnv' object including:
+#'     1. Clustering result.
+#'     2. Dendlist of 'cutree'.
 #' 
 plotCNV <- function(data,
                     assay,
@@ -521,7 +524,7 @@ plotCNV <- function(data,
 # lab_to_rm: a character scalar with the label of cells to exclude.
 #
 # Returns: 
-# An 'infercnv' object with target cells
+#   An 'infercnv' object with target cells
 #
 extract_helper <- function(data, 
                            subtrees = NULL, 

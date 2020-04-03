@@ -49,7 +49,9 @@ values are 'correlation' for Pearson correlation
 and all the distances supported by stats::dist.}
 }
 \value{
-An 'infercnv' object
+Returns an 'infercnv' object including:
+    1. Clustering result.
+    2. Dendlist of 'cutree'.
 }
 \description{
 Clustering and plotting cells based on cnv score matrix using ComplexHeatmap package.

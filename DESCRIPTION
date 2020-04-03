@@ -17,5 +17,11 @@ Packaged: 2020-03-27 09:32:02 UTC; charlene
 Author: Cuijuan Zhang [aut, cre]
 Maintainer: Cuijuan Zhang <zhangcj95@163.com>
 Depends: R (>= 3.4.1)
-Imports: stats, grid, magrittr, dendextend, RColorBrewer,
-        ComplexHeatmap (>= 2.0.0)
+Imports: 
+    stats,
+    grid,
+    magrittr,
+    dendextend,
+    RColorBrewer,
+    ComplexHeatmap (>= 2.0.0),
+    logging

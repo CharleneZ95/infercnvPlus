@@ -49,10 +49,10 @@ Should be given in the form of '-1,1' (lower bound, upper bound).}
 }
 \value{
 Returns an 'infercnv' object including:
-    CNV matrix before visualization.
-    CNV matrix after denoise and outlier removal for visualization.
-    Chromosome order
-    Names of cells in reference groups.
+    1. CNV matrix before visualization.
+    2. CNV matrix after denoise and outlier removal for visualization.
+    3. Chromosome order.
+    4. Names of cells in reference groups.
 }
 \description{
 Calculate CNV scores given a matrix of RNASeq counts. Output a matrix of final values.

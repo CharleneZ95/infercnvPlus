@@ -48,11 +48,11 @@ according to their genomic location
 To include all genes use 0.}
 }
 \value{
-Returns a list including:
-    CNV matrix before visualization.
-    CNV matrix after denoise and outlier removal for visualization.
-    Chromosome order
-    Names of cells in reference groups.
+Returns an 'infercnv' object including:
+    1. CNV matrix before visualization.
+    2. CNV matrix after denoise and outlier removal for visualization.
+    3. Chromosome order.
+    4. Names of cells in reference groups.
 }
 \description{
 Infer CNV changes given a matrix of RNASeq counts. Output a pdf and matrix of final values.

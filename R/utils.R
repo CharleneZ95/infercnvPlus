@@ -38,11 +38,11 @@
 #'                      Should be given in the form of '-1,1' (lower bound, upper bound).
 #'
 #' @return
-#' Returns a list including:
-#'     CNV matrix before visualization.
-#'     CNV matrix after denoise and outlier removal for visualization.
-#'     Chromosome order
-#'     Names of cells in reference groups.
+#' Returns an 'infercnv' object including:
+#'     1. CNV matrix before visualization.
+#'     2. CNV matrix after denoise and outlier removal for visualization.
+#'     3. Chromosome order.
+#'     4. Names of cells in reference groups.
 #' 
 #' @export
 #' 
@@ -144,7 +144,10 @@ inferCNV <- function(data=NULL,
 #' @param out_path output directory.
 #' @param plot_dend whether to plot dendrogram or not. The value should be logical.
 #' 
-#' @return An 'infercnv' object
+#' @return 
+#' Returns an 'infercnv' object including:
+#'     1. Clustering result.
+#'     2. Dendlist of 'cutree'.
 #' 
 #' @export
 #' 
@@ -224,7 +227,8 @@ visualCNV <- function(data,
 #' @param vis_bounds used as upper and lower bounds for values in the visualization.
 #'                      Should be given in the form of '-1,1' (lower bound, upper bound).
 #'
-#' @return Denoised matrix
+#' @return 
+#' Returns an 'infercnv' object including: denoised matrix.
 #'
 #' @export
 #' 

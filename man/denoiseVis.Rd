@@ -18,7 +18,7 @@ Should be given in the form of '-1,1' (lower bound, upper bound).}
 reference removed. Row = Genes, Col = Cells.}
 }
 \value{
-Denoised matrix
+Returns an 'infercnv' object including: denoised matrix.
 }
 \description{
 Args:
