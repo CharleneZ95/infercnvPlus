@@ -1,3 +1,4 @@
+# infercnvPlus
 ### Desciption
 Enhanced "infercnv" package.
 
@@ -32,3 +33,6 @@ cnv_obj <- extractCells(data = cnv_obj,
 # Get cell barcode
 cells <- cnv_obj$target
 ```
+
+### Output figure
+![](./example/output_dir/plot_cnv.png)
