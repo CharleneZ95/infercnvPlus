@@ -262,16 +262,16 @@ order_reduce <- function(data, genomic_position) {
 
 #' @title Calculate CNV scores given a matrix of RNASeq counts. Output a matrix of final values.
 #'
-#' @param data: expression matrix (genes X samples),
+#' @param data: expression matrix (genes X cells),
 #'                 assumed to be log2(TPM+1) .
 #' @param gene_order: ordering of the genes (data's rows)
 #'                       according to their genomic location
 #'                       To include all genes use 0.
 #' @param cutoff: cut-off for the average expression of genes to be
 #'                   used for CNV inference.
-#' @param reference_obs: Column names of the subset of samples (data's columns)
+#' @param reference_obs: Column names of the subset of cells (data's columns)
 #'                          that should be used as references.
-#'                          If not given, the average of all samples will
+#'                          If not given, the average of all cells will
 #'                          be the reference.
 #' @param window_size: length of the window for the moving average
 #'                          (smoothing). Should be an odd integer.
