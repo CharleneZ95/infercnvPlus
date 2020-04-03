@@ -17,7 +17,7 @@
 #'
 #' @param data expression matrix (genes X samples),
 #'                 assumed to be log2(TPM+1) .
-#' @param gene_order ordering of the genes (data's rows)
+#' @param gene_pos ordering of the genes (data's rows)
 #'                       according to their genomic location
 #'                       To include all genes use 0.
 #' @param cutoff cut-off for the average expression of genes to be
@@ -326,7 +326,7 @@ pruneCutree <- function(data,
 #' @param subtrees a numeric scalar or vector specify those subtrees to extract. 
 #' @param lab_to_rm a character scalar with the label of cells to exclude.
 #'
-#' @return Return an 'infercnv' object with target cells
+#' @return Return an 'infercnv' object with target cells.
 #'
 #' @export
 #'
@@ -348,3 +348,17 @@ extractCells <- function(data,
     return(ret_list)
 }
 
+
+#' Transform UMI to log2(TPM+1)
+#' 
+#' Args:
+#' @param data UMI counts matrix (genes X cells).
+#' 
+#' @return Return TPM log2-transformed matrix. 
+#' 
+#' @export 
+#' 
+umi_to_log2tpm <- function(data) {
+    data <- log2(1e6*(sweep(data, 2, colSums(data), '/')) + 1)
+    return(data)
+}

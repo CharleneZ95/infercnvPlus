@@ -2,9 +2,6 @@
 
 logging::basicConfig(level = "INFO")
 
-# opposite to %in%
-"%!in%" <- function(x, y) !(x %in% y)
-
 # Return the indices of the rows that average above the cut off
 #
 # Args:

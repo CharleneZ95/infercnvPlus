@@ -20,6 +20,10 @@ inferCNV(
 \item{data}{expression matrix (genes X samples),
 assumed to be log2(TPM+1) .}
 
+\item{gene_pos}{ordering of the genes (data's rows)
+according to their genomic location
+To include all genes use 0.}
+
 \item{cutoff}{cut-off for the average expression of genes to be
 used for CNV inference.}
 
@@ -42,10 +46,6 @@ removed as noise.}
 
 \item{vis_bounds}{Used as upper and lower bounds for values in the visualization.
 Should be given in the form of '-1,1' (lower bound, upper bound).}
-
-\item{gene_order}{ordering of the genes (data's rows)
-according to their genomic location
-To include all genes use 0.}
 }
 \value{
 Returns an 'infercnv' object including:

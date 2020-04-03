@@ -14,7 +14,7 @@ extractCells(data, subtrees = NULL, lab_to_rm = "ref")
 \item{lab_to_rm}{a character scalar with the label of cells to exclude.}
 }
 \value{
-Return an 'infercnv' object with target cells
+Return an 'infercnv' object with target cells.
 }
 \description{
 Args:
