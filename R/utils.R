@@ -12,19 +12,19 @@
 #' @importFrom ComplexHeatmap HeatmapAnnotation
 #' @importFrom ComplexHeatmap rowAnnotation
 #' @importFrom ComplexHeatmap decorate_annotation
+#' @importFrom Seurat GetAssayData
 #' 
 #' @title Infer CNV changes given a matrix of RNASeq counts. Output a pdf and matrix of final values.
 #'
-#' @param data expression matrix (genes X samples),
-#'                 assumed to be log2(TPM+1) .
+#' @param data expression matrix (genes X cells), assumed to be log2(TPM+1).
 #' @param gene_pos ordering of the genes (data's rows)
 #'                       according to their genomic location
 #'                       To include all genes use 0.
 #' @param cutoff cut-off for the average expression of genes to be
 #'                   used for CNV inference.
-#' @param reference_obs column names of the subset of samples (data's columns)
+#' @param reference_obs column names of the subset of cells (data's columns)
 #'                          that should be used as references.
-#'                          If not given, the average of all samples will
+#'                          If not given, the average of all cells will
 #'                          be the reference.
 #' @param window_size length of the window for the moving average
 #'                          (smoothing). Should be an odd integer.
@@ -46,15 +46,15 @@
 #' 
 #' @export
 #' 
-inferCNV <- function(data=NULL,
-                     gene_pos=NULL,
-                     cutoff=NULL,
+inferCNV <- function(data = NULL,
+                     gene_pos = NULL,
+                     cutoff = NULL,
                      reference_obs,
-                     window_size=101,
-                     out_path='output_dir',
-                     contig_tail=NULL,
-                     noise_filter=NULL,
-                     vis_bounds="-1,1") {
+                     window_size = 101,
+                     out_path = 'output_dir',
+                     contig_tail = NULL,
+                     noise_filter = NULL,
+                     vis_bounds = "-1,1") {
     
     logging::loginfo("inferCNV: Start.")
     
@@ -63,7 +63,7 @@ inferCNV <- function(data=NULL,
     
     # check data
     if (is.null(data)) {
-        stop("data: Expression matrix (genes X samples),", "assumed to be log2(TPM+1).")
+        stop("data: Expression matrix (genes X cells), assumed to be log2(TPM+1).")
     }
     
     # genomic pisition file
@@ -77,19 +77,19 @@ inferCNV <- function(data=NULL,
         stop("cutoff: Please enter a value", "greater or equal to zero for the cut off.")
     }
     
-    # Warn that an average of the samples is used in the absence of normal /
-    # reference samples
+    # Warn that an average of the cells is used in the absence of normal /
+    # reference cells
     if (is.null(reference_obs)) {
-        logging::logwarn(paste0("reference_obs: No reference ", "samples were given, the average of the samples ", 
+        logging::logwarn(paste0("reference_obs: No reference cells were given, the average of the cells ", 
             "will be used."))
         reference_obs <- colnames(data)
     }
     
-    # Make sure the given reference samples are in the matrix.
+    # Make sure the given reference cells are in the matrix.
     if (length(setdiff(reference_obs, colnames(data))) > 0) {
-        missing_reference_sample <- setdiff(reference_obs, colnames(data))
-        error_message <- paste0("Please make sure that all the reference sample ", 
-            "names match a sample in your data matrix. ", "Attention to:", paste(missing_reference_sample, 
+        missing_reference_cell <- setdiff(reference_obs, colnames(data))
+        error_message <- paste0("Please make sure that all the reference cell ", 
+            "names match a cell in your data matrix. ", "Attention to:", paste(missing_reference_cell, 
                 collapse = ","), '.')
         stop(error_message)
     }
@@ -115,7 +115,8 @@ inferCNV <- function(data=NULL,
                         cutoff = cutoff, 
                         reference_obs = reference_obs, 
                         window_size = window_size, 
-                        out_path = out_path, contig_tail = contig_tail, 
+                        out_path = out_path, 
+                        contig_tail = contig_tail, 
                         noise_filter = noise_filter, 
                         vis_bounds = vis_bounds)
     
@@ -354,11 +355,30 @@ extractCells <- function(data,
 #' Args:
 #' @param data UMI counts matrix (genes X cells).
 #' 
-#' @return Return log2-transformed TPM matrix. 
+#' @return Return a log2-transformed TPM matrix. 
 #' 
 #' @export 
 #' 
 umi_to_log2tpm <- function(data) {
-    data <- log2(1e6*(sweep(data, 2, colSums(data), '/')) + 1)
+    data <- log2( 1e6 * ( sweep( as.matrix(data), 2, colSums(data), '/' ) ) + 1)
+    return(data)
+}
+
+
+
+#' Import a seurat object and convert it to matrix for inferCNV.
+#' 
+#' Args:
+#' @param data a Seurat object.
+#' 
+#' @return Return a TPM log2-transformed matrix.
+#' 
+#' @export 
+#' 
+importSrat <- function(obj,
+                       slot = 'counts',
+                       assay = 'RNA') {
+    rawdata <- GetAssayData(object=obj, slot = slot, assay = assay)
+    data <- umi_to_log2tpm( as.matrix(rawdata) )
     return(data)
 }

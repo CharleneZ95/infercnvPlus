@@ -10,7 +10,7 @@ umi_to_log2tpm(data)
 \item{data}{UMI counts matrix (genes X cells).}
 }
 \value{
-Return log2-transformed TPM matrix.
+Return a log2-transformed TPM matrix.
 }
 \description{
 Args:

@@ -17,8 +17,7 @@ inferCNV(
 )
 }
 \arguments{
-\item{data}{expression matrix (genes X samples),
-assumed to be log2(TPM+1) .}
+\item{data}{expression matrix (genes X cells), assumed to be log2(TPM+1).}
 
 \item{gene_pos}{ordering of the genes (data's rows)
 according to their genomic location
@@ -27,9 +26,9 @@ To include all genes use 0.}
 \item{cutoff}{cut-off for the average expression of genes to be
 used for CNV inference.}
 
-\item{reference_obs}{column names of the subset of samples (data's columns)
+\item{reference_obs}{column names of the subset of cells (data's columns)
 that should be used as references.
-If not given, the average of all samples will
+If not given, the average of all cells will
 be the reference.}
 
 \item{window_size}{length of the window for the moving average

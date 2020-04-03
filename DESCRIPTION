@@ -25,3 +25,5 @@ Imports:
     RColorBrewer,
     ComplexHeatmap (>= 2.0.0),
     logging
+Suggests: 
+    Seurat (>= 3.0.2)
