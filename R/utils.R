@@ -17,9 +17,8 @@
 #' @title Infer CNV changes given a matrix of RNASeq counts. Output a pdf and matrix of final values.
 #'
 #' @param data expression matrix (genes X cells), assumed to be log2(TPM+1).
-#' @param gene_pos ordering of the genes (data's rows)
-#'                       according to their genomic location
-#'                       To include all genes use 0.
+#' @param gene_pos The gene ordering file provides the chromosomal location for each gene.
+#'                       Simply providing the gene name, chromosome, and gene span.
 #' @param cutoff cut-off for the average expression of genes to be
 #'                   used for CNV inference.
 #' @param reference_obs column names of the subset of cells (data's columns)

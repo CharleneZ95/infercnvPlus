@@ -4,22 +4,22 @@ Enhanced "infercnv" package.
 
 ### Example
 
-
 ```R
 library(infercnvPlus)
 
-# Load built-data
+# Run examples with built data
 data(npc_expr, genomic_pos, ref_obs, package = "infercnvPlus")
 
 # Data tranforming: genes(rows) X cells(columns)
+# Attention: built-data already tranformed!!!
 ## For 10X counts data 
-npc_expr <- umi_to_log2tpm(npc_expr)
+npc_expr_tr <- umi_to_log2tpm(npc_expr)
 
-## For Smart-seq2 TPM
-npc_expr <- log2(npc_expr + 1)
+## For Smart-seq2 TPM values
+npc_expr_tr <- log2(npc_expr + 1)
 
 # Calucate cnv score
-cnv_obj <- inferCNV(data = npc_expr,
+cnv_obj <- inferCNV(data = npc_expr_tr,
                     gene_pos = genomic_pos,
                     cutoff = 0.1, # use 1 for smart-seq, 0.1 for 10x-genomics
                     reference_obs = ref_obs,
