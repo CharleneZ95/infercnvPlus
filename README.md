@@ -2,6 +2,27 @@
 ### Desciption
 Enhanced "infercnv" package.
 
+### Input
+
+**Expression data:** 10X counts data or Smart-seq2 TPM values.
+|       | CCCTCCTAGCAGCGTA | GTCTCGTCATCCTTGC | TCAGATGGTCATTAGC | ATTCTACCATCTATGG | GACGTGCGTAGCTGCC |
+|  ----  | ----  | ----  | ----  | ----  | ----  |
+| AL627309.1 | 0 | 0 | 0 | 0 | 0 |
+| AL669831.5 | 0 | 0 | 2 | 0 | 0 |
+| LINC00115  | 1 | 0 | 0 | 0 | 0 |
+|   FAM41C   | 0 | 0 | 0 | 0 | 0 |
+|   NOC2L    | 1 | 0 | 0 | 1 | 0 |
+
+**genomic_pos：** genomic coordinates for genes.
+|     | CHR | START | STOP | 
+|  ----  |  ----  |  ----  |  ----  |
+| RP11-34P13.3 | 1 | 29554 | 31109  |
+| FAM138A      | 1 | 34554 | 36081  |
+| OR4F5        | 1 | 69091 | 70008  |
+| RP11-34P13.7 | 1 | 89295 | 133723 |
+| RP11-34P13.8 | 1 | 89551 | 91105  |
+
+
 ### Usage
 
 Run infercnvPlus using built-in data
