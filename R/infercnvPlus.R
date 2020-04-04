@@ -461,6 +461,10 @@ plotCNV <- function(data,
 
     ## row annotation: origin
     ref_obs <- as.character(data$reference_obs)
+    if (length(ref_obs) == nrow(plot_data)){
+        ref_obs <- NULL
+    }
+
     origin <- rep(obs_lab, nrow(plot_data))
     origin[which(rownames(plot_data) %in% ref_obs)] <- ref_lab
     row_anno <- rowAnnotation(origin=origin, col = list(origin = c('obs'='#FFFF00', 

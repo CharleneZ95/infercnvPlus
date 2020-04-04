@@ -365,21 +365,26 @@ umi_to_log2tpm <- function(data) {
 
 
 
-#' Import a seurat object and convert it to matrix for inferCNV.
+#' Import a Seurat(v3) object and convert it to matrix for inferCNV.
 #' 
 #' Args:
 #' @param data a Seurat object.
 #' @param slot slot to use
 #' @param assay which assays to use.
+#' @param log2tpm_tr boolean value specifying if transform UMI to log2(TPM+1) or not.
 #' @return Return a TPM log2-transformed matrix.
 #' 
 #' @export 
 #' 
 importSrat <- function(obj,
                        slot = 'counts',
-                       assay = 'RNA') {
-    rawdata <- GetAssayData(object=obj, slot = slot, assay = assay)
-    data <- umi_to_log2tpm( as.matrix(rawdata) )
+                       assay = 'RNA',
+                       log2tpm_tr = TRUE) {
+    data <- GetAssayData(object = obj, slot = slot, assay = assay)
+    # umi_to_log2tpm
+    if(log2tpm_tr) {
+        data <- umi_to_log2tpm( as.matrix(data) )
+    }
     return(data)
 }
 
@@ -407,33 +412,34 @@ gtf_to_position <- function(gtf,
         return(gene_name)
     }) %>% as.character()
 
-    genom_pos <- data.frame(gene_name, chr = df$V1, start = df$V4, 
-        stop = df$V5, stringsAsFactors = FALSE)
+    genom_pos <- data.frame(GENE_NAME = gene_name, CHR = df$V1, START = df$V4, 
+        STOP = df$V5, stringsAsFactors = FALSE)
 
     # merge position info
-    pos_df <- lapply(split(genom_pos, genom_pos$gene_name), function(x) {
-        x$start <- min(x$start)
-        x$stop  <- max(x$stop)
+    pos_df <- lapply(split(genom_pos, genom_pos$GENE_NAME), function(x) {
+        x$START <- min(x$START)
+        x$STOP  <- max(x$STOP)
         return(x)
     }) %>% do.call(rbind, .)
 
     # dedup
-    pos_uniq <- pos_df[!duplicated(pos_df$gene_name), ]
+    pos_uniq <- pos_df[!duplicated(pos_df$GENE_NAME), ]
     # delete contigs not in c(1:22, X, Y)
-    pos_uniq <- pos_uniq[pos_uniq$chr %in% c(1:22, 'X', 'Y'), ]
+    pos_uniq <- pos_uniq[pos_uniq$CHR %in% c(1:22, 'X', 'Y'), ]
+    chrs <- intersect(c(1:22, 'X', 'Y'), pos_uniq$CHR)
 
     # order by chr and start
-    pos_uniq_order <- lapply( as.list(c(1:22, 'X', 'Y')), function(x){
-        chr_df <- subset(pos_uniq, chr == x)
-        chr_df_order <- chr_df[order(chr_df$start), ]
+    pos_uniq_order <- lapply( as.list(chrs), function(x){
+        chr_df <- subset(pos_uniq, CHR == x)
+        chr_df_order <- chr_df[order(chr_df$START), ]
         return(chr_df_order)
     }) %>% do.call(rbind, .)
 
     # output to file
     write.table(pos_uniq_order, file=file.path(out_path, out_file), row.names = FALSE,
-        col.names = FALSE, sep = '\t', quote = FALSE)
+        col.names = TRUE, sep = '\t', quote = FALSE)
 
-    rownames(pos_uniq_order) <- pos_uniq_order$gene_name
-    pos_uniq_order$gene_name <- NULL
+    rownames(pos_uniq_order) <- pos_uniq_order$GENE_NAME
+    pos_uniq_order$GENE_NAME <- NULL
     return(pos_uniq_order)
 }

@@ -2,24 +2,24 @@
 ### Desciption
 Enhanced "infercnv" package.
 
-### Example
+### Usage
 
+Run infercnvPlus using built-in data
 ```R
 library(infercnvPlus)
 
-# Run examples with built data
-data(npc_expr, genomic_pos, ref_obs, package = "infercnvPlus")
+# Run example with built-in data
+data(expr, genomic_pos, ref_obs, package = "infercnvPlus")
 
 # Data tranforming: genes(rows) X cells(columns)
-# Attention: built-data already tranformed!!!
 ## For 10X counts data 
-npc_expr_tr <- umi_to_log2tpm(npc_expr)
+expr_tr <- umi_to_log2tpm(expr)
 
 ## For Smart-seq2 TPM values
-npc_expr_tr <- log2(npc_expr + 1)
+expr_tr <- log2(expr + 1)
 
 # Calucate cnv score
-cnv_obj <- inferCNV(data = npc_expr_tr,
+cnv_obj <- inferCNV(data = expr_tr,
                     gene_pos = genomic_pos,
                     cutoff = 0.1, # use 1 for smart-seq, 0.1 for 10x-genomics
                     reference_obs = ref_obs,
@@ -42,5 +42,17 @@ cnv_obj <- extractCells(data = cnv_obj,
 cells <- cnv_obj$target
 ```
 
-### Output figure
+Output figure
 ![](./example/output_dir/plot_cnv.png)
+
+### FAQ
+
+How to generate a genomic positions file from a GTF file?
+```R
+genomic_pos <- gtf_to_position(gtf = "path/to/gtf", out_file = "genomic_positions.txt", out_path = "./")
+```
+
+How to convert a Seurat(v3) object to matrix for inferCNV?
+```R
+expr_tr <- importSrat(obj, slot = "counts", assay = "RNA", log2tpm_tr = TRUE)
+```

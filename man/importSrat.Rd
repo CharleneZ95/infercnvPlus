@@ -2,14 +2,16 @@
 % Please edit documentation in R/utils.R
 \name{importSrat}
 \alias{importSrat}
-\title{Import a seurat object and convert it to matrix for inferCNV.}
+\title{Import a Seurat(v3) object and convert it to matrix for inferCNV.}
 \usage{
-importSrat(obj, slot = "counts", assay = "RNA")
+importSrat(obj, slot = "counts", assay = "RNA", log2tpm_tr = TRUE)
 }
 \arguments{
 \item{slot}{slot to use}
 
 \item{assay}{which assays to use.}
+
+\item{log2tpm_tr}{boolean value specifying if transform UMI to log2(TPM+1) or not.}
 
 \item{data}{a Seurat object.}
 }
