@@ -382,3 +382,58 @@ importSrat <- function(obj,
     data <- umi_to_log2tpm( as.matrix(rawdata) )
     return(data)
 }
+
+
+#' Generate a genomic positions file from a GTF file
+#' 
+#' Args:
+#' @param gtf path to input gtf file.
+#' @param out_file filename to save genomic positions.
+#' @param out_path output directory.
+#' 
+#' @return Return genomic positions.
+#' 
+#' @export
+#' 
+gtf_to_position <- function(gtf,
+                            out_file = 'genomic_positions.txt',
+                            out_path = './') {
+
+    df <- read.table(gtf, header = FALSE, stringsAsFactors = FALSE, sep = "\t")
+
+    attrs <- strsplit(df$V9, "; ")
+    gene_name <- lapply(attrs, function(x) {
+        gene_name <- sub("gene_name ", "", grep("gene_name", x, value = TRUE))
+        return(gene_name)
+    }) %>% as.character()
+
+    genom_pos <- data.frame(gene_name, chr = df$V1, start = df$V4, 
+        stop = df$V5, stringsAsFactors = FALSE)
+
+    # merge position info
+    pos_df <- lapply(split(genom_pos, genom_pos$gene_name), function(x) {
+        x$start <- min(x$start)
+        x$stop  <- max(x$stop)
+        return(x)
+    }) %>% do.call(rbind, .)
+
+    # dedup
+    pos_uniq <- pos_df[!duplicated(pos_df$gene_name), ]
+    # delete contigs not in c(1:22, X, Y)
+    pos_uniq <- pos_uniq[pos_uniq$chr %in% c(1:22, 'X', 'Y'), ]
+
+    # order by chr and start
+    pos_uniq_order <- lapply( as.list(c(1:22, 'X', 'Y')), function(x){
+        chr_df <- subset(pos_uniq, chr == x)
+        chr_df_order <- chr_df[order(chr_df$start), ]
+        return(chr_df_order)
+    }) %>% do.call(rbind, .)
+
+    # output to file
+    write.table(pos_uniq_order, file=file.path(out_path, out_file), row.names = FALSE,
+        col.names = FALSE, sep = '\t', quote = FALSE)
+
+    rownames(pos_uniq_order) <- pos_uniq_order$gene_name
+    pos_uniq_order$gene_name <- NULL
+    return(pos_uniq_order)
+}

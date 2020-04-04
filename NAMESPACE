@@ -2,6 +2,7 @@
 
 export(denoiseVis)
 export(extractCells)
+export(gtf_to_position)
 export(importSrat)
 export(inferCNV)
 export(pruneCutree)
