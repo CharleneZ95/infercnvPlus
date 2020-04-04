@@ -6,7 +6,7 @@ Enhanced "infercnv" package.
 
 **Expression data:** 10X counts data or Smart-seq2 TPM values.
 |       | CCCTCCTAGCAGCGTA | GTCTCGTCATCCTTGC | TCAGATGGTCATTAGC | ATTCTACCATCTATGG | GACGTGCGTAGCTGCC |
-|  ----  | ----  | ----  | ----  | ----  | ----  |
+|  ----  | :----:  | :----:  | :----:  | :----:  | :----: |
 | AL627309.1 | 0 | 0 | 0 | 0 | 0 |
 | AL669831.5 | 0 | 0 | 2 | 0 | 0 |
 | LINC00115  | 1 | 0 | 0 | 0 | 0 |
@@ -15,7 +15,7 @@ Enhanced "infercnv" package.
 
 **genomic_pos：** genomic coordinates for genes.
 |     | CHR | START | STOP | 
-|  ----  |  ----  |  ----  |  ----  |
+|  :----  |  :----:  |  :----:  |  :----:  |
 | RP11-34P13.3 | 1 | 29554 | 31109  |
 | FAM138A      | 1 | 34554 | 36081  |
 | OR4F5        | 1 | 69091 | 70008  |
@@ -29,7 +29,7 @@ Run infercnvPlus using built-in data
 ```R
 library(infercnvPlus)
 
-# Run example with built-in data
+# Load built-in data (10X counts)
 data(expr, genomic_pos, ref_obs, package = "infercnvPlus")
 
 # Data tranforming: genes(rows) X cells(columns)
